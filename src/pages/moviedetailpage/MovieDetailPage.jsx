@@ -1,18 +1,25 @@
 import React, {useState} from "react";
 import {useParams} from "react-router-dom";
-/* spinners */
+
+/* Spinner */
 import {BarLoader} from "react-spinners";
-/* hook */
+
+/* Hooks */
+import {useMovieCredits} from "../../hook/useMovieCredits";
 import {useMovieDetail} from "../../hook/useMovieDetail";
 import {useMovieReviews} from "../../hook/useMovieReviews";
-import {useGenreList} from "../../hook/useGenreList";
-import {useMovieCredits} from "../../hook/useMovieCredits";
 import {useMovieTrailer} from "../../hook/useMovieTrailer";
+
+/* Components */
 import RecommendationsMovies from "./RecommendationsMovies.jsx";
-/* react-bootstrap */
-import {Container, Row, Col, Badge, Button, Alert, Modal, Card} from "react-bootstrap";
-/* bs-icons */
-import {BsShieldCheck, BsExclamationTriangle, BsPlayCircle, BsClock, BsGlobeAmericas, BsTranslate, adult} from "react-icons/bs";
+import SimilarMovies from "./SimilarMovies";
+import UserReviews from "./UserReviews";
+
+/* React Bootstrap */
+import {Badge, Button, Col, Container, Modal, Row} from "react-bootstrap";
+
+/* Bootstrap Icons */
+import {BsClock, BsExclamationTriangle, BsGlobeAmericas, BsPlayCircle, BsShieldCheck, BsTranslate} from "react-icons/bs";
 import {FaStar} from "react-icons/fa";
 
 const MovieDetailPage = () => {
@@ -63,12 +70,12 @@ const MovieDetailPage = () => {
             <Col sm={4}>
               <img src={`https://media.themoviedb.org/t/p/w500${movie.poster_path}`} alt={movie.title} className="img-fluid rounded shadow" />
             </Col>
-            <Col sm={8} className="ml-5">
+            <Col sm={8} className="ml-5 movie-info-wrap">
               <h2 className="mb-2">
-                {movie.title} ({movie.release_date.slice(0, 4)})
+                {movie.title} {movie.release_date ? `(${movie.release_date.slice(0, 4)})` : ""}
               </h2>
               <p>
-                개봉일: {movie.release_date}
+                {movie.release_date === "" ? <>미개봉</> : <>개봉일: {movie.release_date}</>}
                 {movie.adult ? (
                   <span>
                     <BsExclamationTriangle className="me-2" />
@@ -222,52 +229,22 @@ const MovieDetailPage = () => {
           </Container>
         </section>
         {/* 리뷰 */}
-        <section className="movie-detail-review">
+        <UserReviews reviewsData={reviewsData}></UserReviews>
+        {/* 비슷한 영화 */}
+        <section>
           <div className="title">
-            <h3>리뷰 {reviewsData?.data?.results?.length}</h3>
-            <p>다른 유저들과 리뷰를 나누세요.</p>
+            <h3>비슷한 영화</h3>
+            <p>{movie.title}을 좋아한다면 이 영화도!</p>
           </div>
-          {reviewsData?.data?.results?.length > 0 && (
-            <Container className="">
-              <Row>
-                {reviewsData.data.results.map((review) => {
-                  const avatarPath = review.author_details?.avatar_path;
-                  const hasAvatar = avatarPath && !avatarPath.includes("null");
-                  const avatarUrl = hasAvatar ? `https://media.themoviedb.org/t/p/w45_and_h45_face${avatarPath}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-                  return (
-                    <Col key={review.id} md={3} xs={12} className="review-card mb-3">
-                      <Card className="">
-                        <div className="author">
-                          <div className="avatar">
-                            <img src={avatarUrl} alt={review.author} className="img-fluid rounded-circle" />
-                          </div>
-                          <h6>{review.author}</h6>
-                        </div>
-                        <p>
-                          {review.content.length > 200 ? review.content.slice(0, 200) + "…" : review.content}{" "}
-                          <a href={review.url} target="_blank">
-                            more
-                          </a>
-                        </p>
-                        <div className="date">
-                          <span>작성 {review.created_at.slice(0, 10)}</span>
-                          {review.created_at.slice(0, 10) !== review.updated_at.slice(0, 10) ? <span>수정 {review.updated_at.slice(0, 10)}</span> : ""}
-                        </div>
-                      </Card>
-                    </Col>
-                  );
-                })}
-              </Row>
-            </Container>
-          )}
+          <SimilarMovies id={id} />
         </section>
         {/* 추천영화 */}
         <section>
           <div className="title">
             <h3>추천영화</h3>
-            <p>{movie.title}을 좋아한다면 이 영화도!</p>
+            <p>{movie.title}에 높은 평가를 준 유저들이 추천합니다.</p>
           </div>
-          <RecommendationsMovies id={id}/>
+          <RecommendationsMovies id={id} />
         </section>
       </section>
     </>

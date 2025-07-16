@@ -4,6 +4,7 @@ import PopularMovieSlide from "./popularmovieslide/PopularMovieSlide";
 import NowPlayingMovieSlide from "./nowplayingmovieslide/NowPlayingMovieSlide";
 import TopRatedMovieSlide from "./topratedmovieslide/TopRatedMovieSlide";
 import UpcomingMovieSlide from "./upcomingmovieslide/UpcomingMovieSlide";
+import TrailerSlide from "./trailerslide/TrailerSlide";
 const HomePage = () => {
   //배너(인기영화중에 0번째 배경이미지), 인기영화, 평점높은, 상영예정
   const movieSections = [
@@ -12,6 +13,12 @@ const HomePage = () => {
       title: "현재 상영작",
       description: "극장에서 바로 만나보실 수 있는 영화입니다.",
       component: <NowPlayingMovieSlide/>,
+    },
+    {
+      id: "Trailer",
+      title: "상영작 예고편",
+      description: "극장에서 바로 만나보실 수 있는 영화입니다.",
+      component: <TrailerSlide/>,
     },
     {
       id: "TopRated",

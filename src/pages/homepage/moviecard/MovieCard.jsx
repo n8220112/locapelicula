@@ -1,12 +1,12 @@
 import React from "react";
 import {useGenreListQuery} from "../../../hook/useGenreList";
 import {useNavigate} from "react-router-dom";
-import {Card, Container} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 
-const MovieCard = ({movie}) => {
+const MovieCard = ({movie, index}) => {
   const navigate = useNavigate();
-  // console.log(movie, 'movie')
-  const imageUrl = `https://media.themoviedb.org/t/p/w500${movie.poster_path}`;
+  //console.log(movie, 'movie')
+  const imageUrl = `https://media.themoviedb.org/t/p/w342${movie.poster_path}`;
   const rating = movie.adult ? "청불" : "전체";
   const {data} = useGenreListQuery();
   const genreList = data?.data?.genres || [];
@@ -22,6 +22,7 @@ const MovieCard = ({movie}) => {
         }}
         onClick={() => navigate(`/movie/${movie.id}`)}
       >
+        <span className="numbering">{index+1}</span>
         <div className="overlay">
           <div className="info">
             <h5>

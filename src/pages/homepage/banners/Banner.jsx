@@ -1,8 +1,13 @@
 import React, {useState} from "react";
 import {usePopularMoviesQuery} from "../../../hook/usePopularMovies";
 import {useMovieTrailer} from "../../../hook/useMovieTrailer";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import {useGenreListQuery} from "../../../hook/useGenreList";
+/* react-bootstrap */
+import {Badge, Button, Modal} from "react-bootstrap";
+/* bs-icons */
+import {BsShieldCheck, BsExclamationTriangle, BsPlayCircle} from "react-icons/bs";
+import {FaStar} from "react-icons/fa";
+
 const Banner = () => {
   /* 모달열고 닫기 */
   const [show, setShow] = useState(false);
@@ -13,7 +18,13 @@ const Banner = () => {
   const {data, isLoading, isError, error} = usePopularMoviesQuery();
   const movie = data?.data?.results?.[0];
 
-  //아이값 들고오기
+  //장르 id에서 이름으로 변경
+  const {data: genreData} = useGenreListQuery();
+  const genreList = genreData?.data?.genres || [];
+  const genreNames = genreList.filter((g) => movie.genre_ids?.includes(g.id)).map((g) => g.name);
+  //console.log("장르명", genreNames);
+
+  //아이디값 들고오기
   const movieId = movie?.id;
   // 영화의 예고편 데이터 가져오기
   const trailerQuery = useMovieTrailer(movieId, {
@@ -23,41 +34,81 @@ const Banner = () => {
   if (isLoading) return <h2>로딩중</h2>;
   if (isError) return <h2>{error.message}</h2>;
   const trailerKey = trailerQuery.data?.data?.results.find((video) => video.type === "Trailer" && video.official === true);
-  console.log(trailerKey);
-  const dataResult = data.data.results[0];
+
+  //console.log(movie);
+
   return (
-    <div className="banner" style={{position: "relative"}} style={{backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${data.data.results[0].backdrop_path})`}}>
-      <div className="textbox">
-        <h2>{data.data.results[0].title}</h2>
-        <span>{data.data.results[0].release_date}</span>
-        <p>{data.data.results[0].overview}</p>
-        <p>{data.data.results[0].vote_average.toFixed(1)}</p>
-        <ul>
-          <li>
-            <span>관람등급</span> {dataResult.adult ? "성인" : "청소년관람가"}
-          </li>
-          <li>
-            <span>장르</span> 
-          </li>
-          <li>
-            <span>개봉일</span> {dataResult.release_date}
-          </li>
-          <li>
-            <span>평점</span> {dataResult.vote_average}
-          </li>
-        </ul>
-        <Button onClick={handleShow}>미리보기</Button>
+    <div className="banner" style={{position: "relative"}} style={{backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path})`}}>
+      <div className="textbox movie-info-wrap">
+        <h2>
+          {movie.title} {movie.release_date ? `(${movie.release_date.slice(0, 4)})` : ""}
+        </h2>
+        <p>
+          {movie.release_date === "" ? <>미개봉</> : <>개봉일: {movie.release_date}</>}
+          {movie.adult ? (
+            <span>
+              <BsExclamationTriangle className="me-2" />
+              성인 관람가
+            </span>
+          ) : (
+            <span>
+              <BsShieldCheck className="me-2" />
+              전체 관람가
+            </span>
+          )}
+        </p>
+        <p>{movie.overview}</p>
+        <div>
+          <strong>평점:</strong>
+          <Badge bg={movie.vote_average >= 7 ? "success" : "warning"} className="ms-2">
+            {movie.vote_average.toFixed(1)}
+          </Badge>
+          <div className="stars">
+            <div className="none">
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+            </div>
+            <div className="color" style={{width: `${movie.vote_average * 10}%`}}>
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+            </div>
+          </div>
+        </div>
+        <div>
+          <strong>장르:</strong> {genreNames?.join("/")}
+        </div>
+        <div>
+          {trailerKey ? (
+            <Button variant="danger" onClick={handleShow}>
+              <BsPlayCircle className="me-2" />
+              예고편 보기
+            </Button>
+          ) : (
+            <p>
+              <BsPlayCircle className="me-2" />
+              예고편이 제공되지 않습니다.
+            </p>
+          )}
+        </div>
       </div>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} size="lg" centered>
         <Modal.Header closeButton>
-          <Modal.Title>예고편 미리보기</Modal.Title>
+          <Modal.Title>{movie.title} - 예고편</Modal.Title>
         </Modal.Header>
-        <Modal.Body
-          style={{
-            position: "relative",
-          }}
-        >
-          {trailerKey ? <iframe src={`https://www.youtube.com/embed/${trailerKey.key}`} frameborder="0"></iframe> : <p>예고편 없음</p>}
+        <Modal.Body>
+          {trailerKey ? (
+            <div className="ratio ratio-16x9">
+              <iframe src={`https://www.youtube.com/embed/${trailerKey.key}`} title="YouTube trailer" allowFullScreen></iframe>
+            </div>
+          ) : (
+            <p>예고편을 불러올 수 없습니다.</p>
+          )}
         </Modal.Body>
       </Modal>
     </div>

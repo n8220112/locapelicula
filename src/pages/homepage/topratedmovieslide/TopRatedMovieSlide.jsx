@@ -1,19 +1,22 @@
-import React from 'react'
+import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
+import {BarLoader} from "react-spinners";
 import {useTopRatedMoviesQuery} from "../../../hook/useTopRatedMovies";
 import MovieCard from "../moviecard/MovieCard";
-
 
 const TopRatedMovieSlide = () => {
   const {data, isLoading, isError, error} = useTopRatedMoviesQuery();
   if (isLoading) {
-    return <h1>로딩중</h1>;
+    return (
+        <BarLoader className="loader" />
+    );
   }
   if (isError) {
     return <h1>{error.message}</h1>;
   }
+
+  console.log("몇번째",data)
 
   const responsive = {
     superLargeDesktop: {
@@ -46,10 +49,10 @@ const TopRatedMovieSlide = () => {
       swipeable={true}
     >
       {data.data.results.map((movie, index) => (
-        <MovieCard movie={movie} key={index}></MovieCard>
+        <MovieCard movie={movie} index={index} key={index}></MovieCard>
       ))}
     </Carousel>
   );
 };
 
-export default TopRatedMovieSlide
+export default TopRatedMovieSlide;

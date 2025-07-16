@@ -1,14 +1,14 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
+import {BarLoader} from "react-spinners";
 import {useUpcomingMoviesQuery} from "../../../hook/useUpcomingMovies";
 import MovieCard from "../moviecard/MovieCard";
 
 const UpcomingMovieSlide = () => {
   const {data, isLoading, isError, error} = useUpcomingMoviesQuery();
   if (isLoading) {
-    return <h1>로딩중</h1>;
+    return <BarLoader className="loader" />;
   }
   if (isError) {
     return <h1>{error.message}</h1>;
@@ -45,7 +45,7 @@ const UpcomingMovieSlide = () => {
       swipeable={true}
     >
       {data.data.results.map((movie, index) => (
-        <MovieCard movie={movie} key={index}></MovieCard>
+        <MovieCard movie={movie} index={index} key={index}></MovieCard>
       ))}
     </Carousel>
   );

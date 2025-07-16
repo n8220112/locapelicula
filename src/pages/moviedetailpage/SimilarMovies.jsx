@@ -2,11 +2,11 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {BarLoader} from "react-spinners";
-import {useRecommendations} from "../../hook/useRecommendations";
+import {useSimilar} from "../../hook/useSimilar";
 import MovieCard from "../homepage/moviecard/MovieCard";
 
-const RecommendationsMovies = ({id}) => {
-  const {data, isLoading, isError, error} = useRecommendations(id);
+const SimilarMovies = ({id}) => {
+  const {data, isLoading, isError, error} = useSimilar(id);
   if (isLoading) {
     return <BarLoader className="loader" />;
   }
@@ -58,4 +58,4 @@ const RecommendationsMovies = ({id}) => {
   );
 };
 
-export default RecommendationsMovies;
+export default SimilarMovies;
