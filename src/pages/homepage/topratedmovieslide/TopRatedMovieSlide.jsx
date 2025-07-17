@@ -14,7 +14,7 @@ const TopRatedMovieSlide = () => {
     return <h1 className="error-message">{error.message}</h1>;
   }
 
-  console.log("몇번째", data);
+  //console.log("몇번째", data);
 
   const responsive = {
     superLargeDesktop: {

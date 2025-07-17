@@ -16,11 +16,11 @@ const MoviePage = () => {
   // 3. 검색 키워드가 있으면 검색 api 실행
   const {data: searchData} = useSearchMovieQuery(keyword);
   //4. 컴포넌트 렌더링되면 인기영화 보여주기
-  useEffect(() => {
+  /* useEffect(() => {
     if (popularData) {
       console.log("무비페이지에서 인기영화 확인", popularData);
     }
-  });
+  }); */
   //5. 경고창에 띄워주기
   /* useEffect(() => {
     if (keyword && searchData) {
