@@ -2,6 +2,7 @@ import React from "react";
 import {useGenreListQuery} from "../../../hook/useGenreList";
 import {useNavigate} from "react-router-dom";
 import {Card} from "react-bootstrap";
+import {FaStar} from "react-icons/fa";
 
 const MovieCard = ({movie, index}) => {
   const navigate = useNavigate();
@@ -18,11 +19,11 @@ const MovieCard = ({movie, index}) => {
         className="movie-card"
         style={{
           backgroundImage: `url(${imageUrl})`,
-          height: "500px",
+          cursor: "pointer",
         }}
         onClick={() => navigate(`/movie/${movie.id}`)}
       >
-        <span className="numbering">{index+1}</span>
+        <span className="numbering">{index + 1}</span>
         <div className="overlay">
           <div className="info">
             <h5>
@@ -34,6 +35,19 @@ const MovieCard = ({movie, index}) => {
           </div>
         </div>
       </Card>
+      <div className="card-title">
+        <h5
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => navigate(`/movie/${movie.id}`)}
+        >
+          {movie.title}
+        </h5>
+        <p style={{color: movie.vote_average > 0 ? "#ffc952" : "#fafafa"}}>
+          평점 {movie.vote_average.toFixed(1)} <FaStar />
+        </p>
+      </div>
     </>
   );
 };

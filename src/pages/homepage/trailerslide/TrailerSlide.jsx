@@ -3,16 +3,17 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {useNowPlayingMoviesQuery} from "../../../hook/useNowPlayingMovies.jsx";
 import TrailerCard from "../trailercard/TrailerCard.jsx";
-import {BarLoader} from "react-spinners";
+import LoadingBar from "../../LoadingBar";
+
 const TrailerSlide = () => {
   const {data, isLoading, isError, error} = useNowPlayingMoviesQuery();
   if (isLoading) {
-    return <BarLoader className="loader" />;
+    return <LoadingBar />;
   }
   if (isError) {
-    return <h1>{error.message}</h1>;
+    return <h1 className="error-message">{error.message}</h1>;
   }
-  console.log(data)
+  //console.log(data)
 
   const responsive = {
     superLargeDesktop: {

@@ -1,10 +1,14 @@
 import React from "react";
 import {useState} from "react";
-import {Button, Modal} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
+import {Modal} from "react-bootstrap";
 import {useMovieTrailer} from "../../../hook/useMovieTrailer";
 import {PiPlayCircle} from "react-icons/pi";
+import {FaStar} from "react-icons/fa";
 
 const TrailerCard = ({movie}) => {
+  const navigate = useNavigate();
+  //console.log("잘 왔나?", movie);
   /* 모달열고 닫기 */
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -26,7 +30,19 @@ const TrailerCard = ({movie}) => {
             <PiPlayCircle />
           </button>
         </div>
-        <h5>{movie.title}</h5>
+        <div className="card-title">
+          <h5
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={() => navigate(`/movie/${movie.id}`)}
+          >
+            {movie.title}
+          </h5>
+          <p style={{color: movie.vote_average > 0 ? "#ffc952" : "#fafafa"}}>
+            평점 {movie.vote_average.toFixed(1)} <FaStar />
+          </p>
+        </div>
       </div>
       <Modal show={show} onHide={handleClose} size="lg" centered>
         <Modal.Header closeButton>

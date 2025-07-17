@@ -1,17 +1,17 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import {BarLoader} from "react-spinners";
 import {useRecommendations} from "../../hook/useRecommendations";
 import MovieCard from "../homepage/moviecard/MovieCard";
+import LoadingBar from "../LoadingBar";
 
 const RecommendationsMovies = ({id}) => {
   const {data, isLoading, isError, error} = useRecommendations(id);
-  if (isLoading) {
-    return <BarLoader className="loader" />;
+    if (isLoading) {
+    return <LoadingBar />;
   }
   if (isError) {
-    return <h1>{error.message}</h1>;
+    return <h1 className="error-message">{error.message}</h1>;
   }
 
   const responsive = {

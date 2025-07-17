@@ -19,7 +19,7 @@ const AppLayout = () => {
     <>
       <Navbar expand="lg" variant="dark" bg="dark">
         <Container>
-          <Navbar.Brand href="/">Movie 306</Navbar.Brand>
+          <Navbar.Brand href="/">LocaPelicula</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" id="navbar-toggler" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto my-2 my-lg-0" navbarScroll>
@@ -48,7 +48,7 @@ const AppLayout = () => {
       </main>
       <footer>
         <Container fluid className="text-center py-5 bg-dark">
-          © 2025, MOVIE306. All rights reserved.
+          © 2025, LocaPelicula. All rights reserved.
         </Container>
       </footer>
     </>

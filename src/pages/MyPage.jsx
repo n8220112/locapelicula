@@ -49,7 +49,7 @@ const MyPage = () => {
               </div>
               <div>
                 <h6>이메일 주소</h6>
-                <span>bxrntxdxx@naver.com</span>
+                <span>emailaddress@locapeli.com</span>
               </div>
               <div>
                 <h6>별점 분포</h6>
@@ -57,7 +57,7 @@ const MyPage = () => {
               </div>
               <div>
                 <h6>핸드폰 번호</h6>
-                <span>010-3913-9158</span>
+                <span>012-5648-3186</span>
               </div>
               <div>
                 <h6>선호태그</h6>

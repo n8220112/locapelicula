@@ -4,7 +4,8 @@ import {useSearchParams} from "react-router-dom";
 import {usePopularMoviesQuery} from "../../hook/usePopularMovies";
 import {useSearchMovieQuery} from "../../hook/useSearchMovieQuery";
 import MovieCard from "../homepage/moviecard/MovieCard";
-import {Container, Row, Col, Dropdown, DropdownButton} from "react-bootstrap";
+import {Container, Row, Col, Dropdown} from "react-bootstrap";
+import LoadingBar from "../LoadingBar";
 
 const MoviePage = () => {
   // 1. 인기영화 데이터 가져오기
@@ -51,12 +52,22 @@ const MoviePage = () => {
   //데이터 정렬
   const displayedData = keyword ? applySorting(searchData?.data?.results) : applySorting(popularData?.data?.results);
 
+  if (isLoading) {
+    return (
+      <div className="movie-detail-loading">
+        <LoadingBar />
+      </div>
+    );
+  }
+  if (isError) {
+    return <h1 className="error-message">{error.message}</h1>;
+  }
   return (
     <section className="movie-page">
       <div className="title">
         <h2>{keyword ? `검색 결과: ${keyword}` : "인기 영화"}</h2>
         <div className="sortfilters mb-3 d-inline">
-          <Dropdown  data-bs-theme="dark" onSelect={(key) => setSortOption(key)}>
+          <Dropdown data-bs-theme="dark" onSelect={(key) => setSortOption(key)}>
             <Dropdown.Toggle variant="secondary" id="sort-dropdown">
               {(() => {
                 switch (sortOption) {
@@ -73,10 +84,7 @@ const MoviePage = () => {
                 }
               })()}
             </Dropdown.Toggle>
-            <Dropdown.Menu
-            align="end"
-            title="기본순"
-            >
+            <Dropdown.Menu align="end" title="기본순">
               <Dropdown.Item eventKey="defaultSort">기본순</Dropdown.Item>
               <Dropdown.Item eventKey="vote">평가 좋은 순</Dropdown.Item>
               <Dropdown.Item eventKey="popularity">인기 많은 순</Dropdown.Item>
@@ -92,7 +100,6 @@ const MoviePage = () => {
           {displayedData.map((movie, index) => (
             <Col md={2} key={index}>
               <MovieCard movie={movie} />
-              <h5>{movie.title}</h5>
             </Col>
           ))}
         </Row>

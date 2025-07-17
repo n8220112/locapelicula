@@ -2,13 +2,16 @@ import React, {useState} from "react";
 import {usePopularMoviesQuery} from "../../../hook/usePopularMovies";
 import {useMovieTrailer} from "../../../hook/useMovieTrailer";
 import {useGenreListQuery} from "../../../hook/useGenreList";
+import {useNavigate} from "react-router-dom";
 /* react-bootstrap */
 import {Badge, Button, Modal} from "react-bootstrap";
 /* bs-icons */
 import {BsShieldCheck, BsExclamationTriangle, BsPlayCircle} from "react-icons/bs";
 import {FaStar} from "react-icons/fa";
+import LoadingBar from "../../LoadingBar";
 
 const Banner = () => {
+  const navigate = useNavigate();
   /* 모달열고 닫기 */
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -31,16 +34,20 @@ const Banner = () => {
     enabled: !!movieId,
   });
   // console.log('트레일러내용', trailerQuery.data);
-  if (isLoading) return <h2>로딩중</h2>;
-  if (isError) return <h2>{error.message}</h2>;
+  if (isLoading) {
+    return <LoadingBar />;
+  }
+  if (isError) {
+    return <h1 className="error-message">{error.message}</h1>;
+  }
   const trailerKey = trailerQuery.data?.data?.results.find((video) => video.type === "Trailer" && video.official === true);
 
   //console.log(movie);
 
   return (
-    <div className="banner" style={{position: "relative"}} style={{backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path})`}}>
+    <div className="banner" style={{position: "relative", backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path})`}}>
       <div className="textbox movie-info-wrap">
-        <h2>
+        <h2 onClick={() => navigate(`/movie/${movie.id}`)} style={{cursor: "pointer"}}>
           {movie.title} {movie.release_date ? `(${movie.release_date.slice(0, 4)})` : ""}
         </h2>
         <p>

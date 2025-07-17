@@ -1,17 +1,17 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import {BarLoader} from "react-spinners";
 import {useUpcomingMoviesQuery} from "../../../hook/useUpcomingMovies";
 import MovieCard from "../moviecard/MovieCard";
+import LoadingBar from "../../LoadingBar";
 
 const UpcomingMovieSlide = () => {
   const {data, isLoading, isError, error} = useUpcomingMoviesQuery();
   if (isLoading) {
-    return <BarLoader className="loader" />;
+    return <LoadingBar />;
   }
   if (isError) {
-    return <h1>{error.message}</h1>;
+    return <h1 className="error-message">{error.message}</h1>;
   }
 
   const responsive = {

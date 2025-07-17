@@ -1,24 +1,14 @@
 import React, {useState} from "react";
 import {useParams} from "react-router-dom";
-
-/* Spinner */
-import {BarLoader} from "react-spinners";
-
-/* Hooks */
 import {useMovieCredits} from "../../hook/useMovieCredits";
 import {useMovieDetail} from "../../hook/useMovieDetail";
 import {useMovieReviews} from "../../hook/useMovieReviews";
 import {useMovieTrailer} from "../../hook/useMovieTrailer";
-
-/* Components */
 import RecommendationsMovies from "./RecommendationsMovies.jsx";
 import SimilarMovies from "./SimilarMovies";
 import UserReviews from "./UserReviews";
-
-/* React Bootstrap */
+import LoadingBar from "../LoadingBar";
 import {Badge, Button, Col, Container, Modal, Row} from "react-bootstrap";
-
-/* Bootstrap Icons */
 import {BsClock, BsExclamationTriangle, BsGlobeAmericas, BsPlayCircle, BsShieldCheck, BsTranslate} from "react-icons/bs";
 import {FaStar} from "react-icons/fa";
 
@@ -28,19 +18,21 @@ const MovieDetailPage = () => {
   const {data: reviewsData} = useMovieReviews(id);
   const {data: creditsData} = useMovieCredits(id);
   const {data: trailerData} = useMovieTrailer(id);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <h2>
-        <BarLoader className="loader" />
-      </h2>
+      <div className="movie-detail-loading">
+        <LoadingBar />
+      </div>
     );
-  if (isError) return <h2>{error.message}</h2>;
+  }
+  if (isError) {
+    return <h1 className="error-message">{error.message}</h1>;
+  }
 
   const movie = data?.data;
   const trailer = trailerData?.data?.results?.find((vid) => vid.type === "Trailer" && vid.site === "YouTube");
@@ -60,6 +52,16 @@ const MovieDetailPage = () => {
     }
   }
   const directors = creditsData?.data?.crew?.filter(isDirector);
+
+  /* 조사 구분 - 유니코드 사용 */
+  function checkLasrChar(title) {
+    const charCode = title.charCodeAt(title.length - 1);
+    const consonantCode = (charCode - 44032) % 28;
+    if (consonantCode === 0) {
+      return `${title}를`;
+    }
+    return `${title}을`;
+  }
 
   return (
     <>
@@ -168,7 +170,7 @@ const MovieDetailPage = () => {
         </Modal>
       </div>
       <section className="movie-detail-page">
-        {/* 출연배우 */}
+        {/* 제작진 */}
         <section className="movie-detail-credit">
           <div className="title">
             <h3>출연/제작</h3>
@@ -186,7 +188,7 @@ const MovieDetailPage = () => {
                       const profileUrl = hasProfile ? `http://image.tmdb.org/t/p/w185${directorProfilePath}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
                       return (
-                        <Col key={director?.credit_id} md={3} xs={6}>
+                        <Col key={director?.credit_id} xl={3} md={4} xs={6}>
                           <img src={profileUrl} alt={`${director?.name} 프로필`} className="rounded" />
                           <div>
                             <h6>감독</h6>
@@ -201,7 +203,7 @@ const MovieDetailPage = () => {
                       const profileUrl = hasProfile ? `http://image.tmdb.org/t/p/w185${directorProfilePath}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
                       return (
-                        <Col key={director.credit_id} md={3} xs={6}>
+                        <Col key={director.credit_id} xl={3} md={4} xs={6}>
                           <img src={profileUrl} alt={`${director.name} 프로필`} className="rounded" />
                           <div>
                             <h6>감독</h6>
@@ -216,7 +218,7 @@ const MovieDetailPage = () => {
                 const hasProfile = castProfilePath && !castProfilePath.includes("null");
                 const profileUrl = hasProfile ? `http://image.tmdb.org/t/p/w185${castProfilePath}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png";
                 return (
-                  <Col key={cast.cast_id} md={3} xs={6} className="">
+                  <Col key={cast.cast_id} xl={3} md={4} xs={6}>
                     <img src={profileUrl} alt="" className="rounded" />
                     <div>
                       <h6>{cast.character}</h6>
@@ -234,7 +236,7 @@ const MovieDetailPage = () => {
         <section>
           <div className="title">
             <h3>비슷한 영화</h3>
-            <p>{movie.title}을 좋아한다면 이 영화도!</p>
+            <p>{checkLasrChar(movie.title)} 좋아한다면 이 영화도!</p>
           </div>
           <SimilarMovies id={id} />
         </section>

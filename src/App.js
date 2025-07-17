@@ -10,7 +10,6 @@ import Login from "./pages/Login";
 import MyPage from "./pages/MyPage";
 import NotFoundPage from "./pages/NotFoundPage";
 /* css */
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/App.scss";
 
 function App() {
