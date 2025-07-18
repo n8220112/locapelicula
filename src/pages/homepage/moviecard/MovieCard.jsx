@@ -21,7 +21,7 @@ const MovieCard = ({movie, index}) => {
           backgroundImage: `url(${imageUrl})`,
           cursor: "pointer",
         }}
-        onClick={() => navigate(`/movie/${movie.id}`)}
+        onClick={() => navigate(`/movies/${movie.id}`)}
       >
         <span className="numbering">{index + 1}</span>
         <div className="overlay">

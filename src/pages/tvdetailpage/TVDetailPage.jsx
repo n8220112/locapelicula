@@ -2,29 +2,29 @@ import React, {useState} from "react";
 import {useParams} from "react-router-dom";
 
 /* Hooks */
-import {useMovieCredits} from "../../hook/useMovieCredits";
-import {useMovieDetail} from "../../hook/useMovieDetail";
-import {useMovieReviews} from "../../hook/useMovieReviews";
-import {useMovieTrailer} from "../../hook/useMovieTrailer";
+import {useTVDetailQuery} from "../../hook/useTVDetailQuery";
+import {useTVCreditsQuery} from "../../hook/useTVCreditsQuery";
+import {useTVReviewsQuery} from "../../hook/useTVReviewsQuery";
+import {useTVTrailerQuery} from "../../hook/useTVTrailerQuery";
 
 /* Components */
-import RecommendationsMovies from "./RecommendationsMovies";
-import SimilarMovies from "./SimilarMovies";
 import UserReviews from "./UserReviews";
+import RecommendationsTVShows from "./RecommendationsTVShows";
+import SimilarTVShows from "./SimilarTVShows";
 import LoadingBar from "../LoadingBar";
 
 /* UI */
-import {Badge, Button, Col, Container, Modal, Row} from "react-bootstrap";
+import {Container, Row, Col, Badge, Button, Modal} from "react-bootstrap";
 import {BsClock, BsExclamationTriangle, BsGlobeAmericas, BsPlayCircle, BsShieldCheck, BsTranslate} from "react-icons/bs";
 import {FaStar} from "react-icons/fa";
 
-const MovieDetailPage = () => {
+const TVDetailPage = () => {
   const {id} = useParams();
 
-  const {data, isLoading, isError, error} = useMovieDetail(id);
-  const {data: reviewsData} = useMovieReviews(id);
-  const {data: creditsData} = useMovieCredits(id);
-  const {data: trailerData} = useMovieTrailer(id);
+  const {data, isLoading, isError, error} = useTVDetailQuery(id);
+  const {data: creditsData} = useTVCreditsQuery(id);
+  const {data: reviewsData} = useTVReviewsQuery(id);
+  const {data: trailerData} = useTVTrailerQuery(id);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -41,11 +41,14 @@ const MovieDetailPage = () => {
     return <h1 className="error-message">{error.message}</h1>;
   }
 
-  const movie = data?.data;
+  console.log(data);
+
+  const tv = data?.data;
+
   const trailer = trailerData?.data?.results?.find((vid) => vid.type === "Trailer" && vid.site === "YouTube");
 
   const backdropStyle = {
-    backgroundImage: `url(https://media.themoviedb.org/t/p/w1280${movie.backdrop_path})`,
+    backgroundImage: `url(https://media.themoviedb.org/t/p/w1280${tv.backdrop_path})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     position: "relative",
@@ -71,22 +74,22 @@ const MovieDetailPage = () => {
 
   return (
     <>
-      {/* 상단 */}
+      {/* 상단 상세 정보 */}
       <div className="movie-detail-back" style={backdropStyle}>
         <Container>
           <Row className="align-items-center">
             <Col sm={4}>
-              <img src={`https://media.themoviedb.org/t/p/w500${movie.poster_path}`} alt={movie.title} className="img-fluid rounded shadow" />
+              <img src={`https://media.themoviedb.org/t/p/w500${tv.poster_path}`} alt={tv.name} className="img-fluid rounded shadow" />
             </Col>
             <Col sm={8} className="ml-5 movie-info-wrap">
-
+            
               <h2 className="mb-2">
-                {movie.title} {movie.release_date ? `(${movie.release_date.slice(0, 4)})` : ""}
+                {tv.name} {tv.first_air_date ? `(${tv.first_air_date.slice(0, 4)})` : ""}
               </h2>
 
               <p>
-                {movie.release_date === "" ? <>미개봉</> : <>개봉일: {movie.release_date}</>}
-                {movie.adult ? (
+                {tv.release_date === "" ? <>미방영</> : <>방영 시작일: {tv.release_date}</>}
+                {tv.adult ? (
                   <span>
                     <BsExclamationTriangle className="me-2" />
                     성인 관람가
@@ -99,12 +102,12 @@ const MovieDetailPage = () => {
                 )}
               </p>
 
-              <p>{movie.overview}</p>
+              <p>{tv.overview}</p>
 
-              <div className="mb-2" style={{display:"flex", alignItems:"center"}}>
+              <div className="mb-2" style={{display: "flex", alignItems: "center"}}>
                 <strong>평점:</strong>
-                <Badge bg={movie.vote_average >= 7 ? "success" : "warning"} className="ms-2">
-                  {movie.vote_average.toFixed(1)}
+                <Badge bg={tv.vote_average >= 7 ? "success" : "warning"} className="ms-2">
+                  {tv.vote_average.toFixed(1)}
                 </Badge>
                 <div className="stars">
                   <div className="none">
@@ -114,7 +117,7 @@ const MovieDetailPage = () => {
                     <FaStar />
                     <FaStar />
                   </div>
-                  <div className="color" style={{width: `${movie.vote_average * 10}%`}}>
+                  <div className="color" style={{width: `${tv.vote_average * 10}%`}}>
                     <FaStar />
                     <FaStar />
                     <FaStar />
@@ -123,34 +126,34 @@ const MovieDetailPage = () => {
                   </div>
                 </div>
               </div>
-              
               <div className="mb-2">
-                <strong>장르:</strong> {movie.genres?.map((g) => g.name).join(", ")}
+                <strong>장르:</strong> {tv.genres?.map((g) => g.name).join(", ")}
+              </div>
+
+              {/* 한 에피소드 평균 러닝타임 */}
+              <div className="mb-2">
+                <strong>
+                  <BsClock className="me-2" /> 평균 러닝타임:
+                </strong>{" "}
+                {tv.episode_run_time?.[0] || "정보 없음"}분
               </div>
 
               <div className="mb-2">
                 <strong>
-                  <BsClock className="me-2" />
-                  러닝타임:
+                  <BsGlobeAmericas className="me-2" /> 제작 국가:
                 </strong>{" "}
-                {movie.runtime}분
+                {tv.production_countries?.map((c) => c.name).join(", ")}
               </div>
 
+              {/* 언어 */}
               <div className="mb-2">
                 <strong>
-                  <BsGlobeAmericas className="me-2" />
-                  국가:
+                  <BsTranslate className="me-2" /> 언어:
                 </strong>{" "}
-                {movie.production_countries?.map((c) => c.name).join(", ")}
+                {tv.original_language?.toUpperCase()}
               </div>
 
-              <div className="mb-2">
-                <strong>
-                  <BsTranslate className="me-2" />
-                  언어:
-                </strong>{" "}
-                {movie.original_language?.toUpperCase()}
-              </div>
+              {/* 예고편 버튼 */}
               <div className="mt-4">
                 {trailer ? (
                   <Button variant="danger" onClick={handleShow}>
@@ -159,8 +162,7 @@ const MovieDetailPage = () => {
                   </Button>
                 ) : (
                   <p>
-                    <BsPlayCircle className="me-2" />
-                    예고편이 제공되지 않습니다.
+                    <BsPlayCircle className="me-2" /> 예고편이 제공되지 않습니다.
                   </p>
                 )}
               </div>
@@ -168,9 +170,10 @@ const MovieDetailPage = () => {
           </Row>
         </Container>
 
+        {/* 예고편 모달 */}
         <Modal show={show} onHide={handleClose} size="lg" centered>
           <Modal.Header closeButton>
-            <Modal.Title>{movie.title} - 예고편</Modal.Title>
+            <Modal.Title>{tv.name} - 예고편</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {trailer ? (
@@ -185,12 +188,11 @@ const MovieDetailPage = () => {
       </div>
 
       <section className="movie-detail-page">
-        
         {/* 제작진 */}
         <section className="movie-detail-credit">
           <div className="title">
             <h3>출연/제작</h3>
-            <p>{movie.title}의 제작진과 배우입니다.</p>
+            <p>{tv.name}의 제작진과 배우입니다.</p>
           </div>
           <Container>
             <Row>
@@ -250,26 +252,26 @@ const MovieDetailPage = () => {
         {/* 리뷰 */}
         <UserReviews reviewsData={reviewsData}></UserReviews>
 
-        {/* 비슷한 영화 */}
+        {/* 추천 TV */}
         <section>
           <div className="title">
-            <h3>비슷한 영화</h3>
-            <p>{checkLasrChar(movie.title)} 좋아한다면 이 영화도!</p>
+            <h3>비슷한 시리즈</h3>
+            <p>{checkLasrChar(tv.name)} 좋아한다면 이 프로그램도!</p>
           </div>
-          <SimilarMovies id={id} />
+          <SimilarTVShows id={id} />
         </section>
-        
-        {/* 추천영화 */}
+
+        {/* 비슷한 TV */}
         <section>
           <div className="title">
-            <h3>추천영화</h3>
-            <p>{movie.title}에 높은 평가를 준 유저들이 추천합니다.</p>
+            <h3>추천시리즈</h3>
+            <p>{tv.name}에 높은 평가를 준 유저들이 추천합니다.</p>
           </div>
-          <RecommendationsMovies id={id} />
+          <RecommendationsTVShows id={id} />
         </section>
       </section>
     </>
   );
 };
 
-export default MovieDetailPage;
+export default TVDetailPage;

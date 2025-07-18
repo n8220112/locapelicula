@@ -2,19 +2,19 @@ import React, {useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import {Container, Row, Col, Spinner, Alert, Form, Pagination, Button, Card} from "react-bootstrap";
 
-import {usePopularMoviesQuery} from "../../hook/usePopularMovies";
-import {useSearchMovieQuery} from "../../hook/useSearchMovieQuery";
-import {useGenreListQuery} from "../../hook/useGenreList"; // 영화 장르 리스트
+import {usePopularTVQuery} from "../../hook/usePopularTVQuery";
+import {useSearchTVQuery} from "../../hook/useSearchTVQuery";
+import {useTVGenreListQuery} from "../../hook/useTVGenreList"; // TV 장르 리스트
 
-import MovieCard from "../homepage/moviecard/MovieCard";
+import TvCard from "../homepage/TVcard/TvCard";
 import LoadingBar from "../LoadingBar";
 
-const MoviePage = () => {
+const TVShowsPage = () => {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword");
 
-  // 영화 장르 리스트
-  const {data: genreData} = useGenreListQuery();
+  // TV 장르 리스트
+  const {data: genreData} = useTVGenreListQuery();
   const genreList = genreData?.data?.genres || [];
 
   // 필터 상태
@@ -32,7 +32,7 @@ const MoviePage = () => {
     isLoading: isSearchLoading,
     isError: isSearchError,
     error: searchError,
-  } = useSearchMovieQuery(keyword, {
+  } = useSearchTVQuery(keyword, {
     enabled: !!keyword,
   });
 
@@ -42,19 +42,19 @@ const MoviePage = () => {
     isLoading: isPopularLoading,
     isError: isPopularError,
     error: popularError,
-  } = usePopularMoviesQuery({
+  } = usePopularTVQuery({
     enabled: !keyword,
   });
 
   // 데이터 선택
-  const movieList = keyword ? searchData?.data?.results : popularData?.data?.results;
+  const tvList = keyword ? searchData?.data?.results : popularData?.data?.results;
 
   if (isSearchLoading || isPopularLoading) return <LoadingBar />;
   if (isSearchError) return <Alert variant="danger">{searchError.message}</Alert>;
   if (isPopularError) return <Alert variant="danger">{popularError.message}</Alert>;
 
   // 필터 + 정렬 적용
-  const filteredMovies = (movieList || [])
+  const filteredTVs = (tvList || [])
     .filter((m) => (selectedGenre ? m.genre_ids?.includes(selectedGenre) : true))
     .filter((m) => m.vote_average >= scoreRange)
     .filter((m) => (m.episode_run_time ? m.episode_run_time[0] <= runtimeRange : true))
@@ -68,17 +68,17 @@ const MoviePage = () => {
 
   // 페이지네이션
   const itemsPerPage = 12;
-  const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredTVs.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
-  const pagedMovies = filteredMovies.slice(startIndex, startIndex + itemsPerPage);
+  const pagedTVs = filteredTVs.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <Container className="my-5 movie-page">
-      <h3 className="mb-4">{keyword ? `"${keyword}" 검색된 영화` : "인기 영화"}</h3>
+      <h3 className="mb-4">{keyword ? `"${keyword}" 검색된 TV 프로그램` : "인기 TV 프로그램"}</h3>
 
       {/* 필터 영역 (디자인 MoviePage 동일) */}
       <Card className="mb-4 shadow-sm filter-card">
-        <Card.Header className="bg-dark text-white fw-bold">영화 필터 옵션</Card.Header>
+        <Card.Header className="bg-dark text-white fw-bold">TV 필터 옵션</Card.Header>
         <Card.Body>
           <Row className="gy-4">
             {/*정렬 */}
@@ -117,20 +117,20 @@ const MoviePage = () => {
 
             {/*상영시간 Range */}
             <Col xs={12} md={6}>
-              <Form.Label className="fw-bold">상영시간</Form.Label>
+              <Form.Label className="fw-bold">에피소드 러닝타임</Form.Label>
               <Form.Range min={0} max={240} step={10} value={runtimeRange} onChange={(e) => setRuntimeRange(Number(e.target.value))} />
-              <div className="text-info fw-bold mt-1">{runtimeRange}분 이하 영화만 보기</div>
+              <div className="text-info fw-bold mt-1">{runtimeRange}분 이하 에피소드만 보기</div>
             </Col>
           </Row>
         </Card.Body>
       </Card>
 
-      {/* 영화 목록 */}
+      {/* TV 목록 */}
       <Row>
-        {pagedMovies?.length > 0 ? (
-          pagedMovies.map((movie, index) => (
-            <Col key={movie.id} xs={6} md={3} lg={2}>
-              <MovieCard movie={movie} index={index} />
+        {pagedTVs?.length > 0 ? (
+          pagedTVs.map((tv, index) => (
+            <Col key={tv.id} xs={6} md={3} lg={2}>
+              <TvCard tv={tv} index={index} />
             </Col>
           ))
         ) : (
@@ -154,4 +154,4 @@ const MoviePage = () => {
   );
 };
 
-export default MoviePage;
+export default TVShowsPage;

@@ -24,7 +24,8 @@ const Banner = () => {
   //장르 id에서 이름으로 변경
   const {data: genreData} = useGenreListQuery();
   const genreList = genreData?.data?.genres || [];
-  const genreNames = genreList.filter((g) => movie.genre_ids?.includes(g.id)).map((g) => g.name);
+  const genreNames = genreList.filter((g) => movie?.genre_ids?.includes(g.id)).map((g) => g.name);
+
   //console.log("장르명", genreNames);
 
   //아이디값 들고오기
@@ -45,11 +46,13 @@ const Banner = () => {
   //console.log(movie);
 
   return (
-    <div className="banner" style={{position: "relative", backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path})`}}>
+    <div className="banner" style={{backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path})`}}>
       <div className="textbox movie-info-wrap">
-        <h2 onClick={() => navigate(`/movie/${movie.id}`)} style={{cursor: "pointer"}}>
+
+        <h2 onClick={() => navigate(`/movies/${movie.id}`)} style={{cursor: "pointer"}}>
           {movie.title} {movie.release_date ? `(${movie.release_date.slice(0, 4)})` : ""}
         </h2>
+
         <p>
           {movie.release_date === "" ? <>미개봉</> : <>개봉일: {movie.release_date}</>}
           {movie.adult ? (
@@ -64,8 +67,10 @@ const Banner = () => {
             </span>
           )}
         </p>
+
         <p>{movie.overview}</p>
-        <div>
+
+        <div style={{display: "flex", alignItems: "center"}}>
           <strong>평점:</strong>
           <Badge bg={movie.vote_average >= 7 ? "success" : "warning"} className="ms-2">
             {movie.vote_average.toFixed(1)}
@@ -87,9 +92,11 @@ const Banner = () => {
             </div>
           </div>
         </div>
+
         <div>
           <strong>장르:</strong> {genreNames?.join("/")}
         </div>
+
         <div>
           {trailerKey ? (
             <Button variant="danger" onClick={handleShow}>
@@ -103,6 +110,7 @@ const Banner = () => {
             </p>
           )}
         </div>
+        
       </div>
       <Modal show={show} onHide={handleClose} size="lg" centered>
         <Modal.Header closeButton>

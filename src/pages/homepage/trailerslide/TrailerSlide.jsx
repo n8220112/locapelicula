@@ -3,7 +3,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {useNowPlayingMoviesQuery} from "../../../hook/useNowPlayingMovies.jsx";
 import TrailerCard from "../trailercard/TrailerCard.jsx";
-import LoadingBar from "../../LoadingBar";
+import LoadingBar from "../../LoadingBar.jsx";
 
 const TrailerSlide = () => {
   const {data, isLoading, isError, error} = useNowPlayingMoviesQuery();

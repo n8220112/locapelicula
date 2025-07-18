@@ -1,26 +1,33 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
+
 import Banner from "./banners/Banner";
 import PopularMovieSlide from "./popularmovieslide/PopularMovieSlide";
 import NowPlayingMovieSlide from "./nowplayingmovieslide/NowPlayingMovieSlide";
 import TopRatedMovieSlide from "./topratedmovieslide/TopRatedMovieSlide";
 import UpcomingMovieSlide from "./upcomingmovieslide/UpcomingMovieSlide";
-import TrailerSlide from "./trailerslide/TrailerSlide";
+import LatestTrailerSection from "./latesttrailersection/LatestTrailerSection";
+import OnAirTVSlide from "./onairTVslide/OnAirTVSlide";
+import TopRatedTVSlide from "./topratedTVslide/TopRatedTVSlide";
+import PopularTVSlide from "./popularTVslide/PopularTVSlide";
+
 import {Container, Row, Col} from "react-bootstrap";
 
 const HomePage = () => {
-  //배너(인기영화중에 0번째 배경이미지), 인기영화, 평점높은, 상영예정
-  const movieSections = [
+  const navigate = useNavigate();
+
+  const homeSections = [
+    {
+      id: "latestTrailers",
+      title: "최신 예고편",
+      description: "",
+      component: <LatestTrailerSection />,
+    },
     {
       id: "NowPlaying",
       title: "현재 상영작",
       description: "극장에서 바로 만나보실 수 있는 영화입니다.",
       component: <NowPlayingMovieSlide />,
-    },
-    {
-      id: "Trailer",
-      title: "상영작 예고편",
-      description: "극장에서 바로 만나보실 수 있는 영화입니다.",
-      component: <TrailerSlide />,
     },
     {
       id: "TopRated",
@@ -39,6 +46,24 @@ const HomePage = () => {
       title: "개봉 예정작",
       description: "개봉이 임박한 영화 목록입니다.",
       component: <UpcomingMovieSlide />,
+    },
+    {
+      id: "popularTV",
+      title: "인기 TV 프로그램",
+      description: "많은 사람들이 시청하는 TV 프로그램",
+      component: <PopularTVSlide />,
+    },
+    {
+      id: "onAirTV",
+      title: "방영 중인 TV 프로그램",
+      description: "지금 방영 중인 TV 시리즈",
+      component: <OnAirTVSlide />,
+    },
+    {
+      id: "topRatedTV",
+      title: "평점 높은 TV 프로그램",
+      description: "가장 높은 평점을 받은 TV 시리즈",
+      component: <TopRatedTVSlide />,
     },
   ];
   return (
@@ -86,12 +111,36 @@ const HomePage = () => {
           </Row>
         </Container>
       </section>
-      {movieSections.map((section) => (
-        <section key={section.id} className="movie-section">
-          <h2>{section.title}</h2>
-          <p>{section.description}</p>
-          {section.component}
-        </section>
+      {homeSections.map((section, index) => (
+        <React.Fragment key={section.id}>
+          <section className="home-section">
+            <h2>{section.title}</h2>
+            {section.description && <p>{section.description}</p>}
+            {section.component}
+          </section>
+
+          {/* 최신 예고편 뒤 → 영화 배너 삽입 */}
+          {index === 0 && (
+            <section className="custom-banner movie-banner">
+              <div className="overlay" />
+              <div className="banner-text">
+                <h2>🎬 지금 극장에서 화제작을 만나보세요!</h2>
+                <button onClick={() => navigate("/movies")}>영화 더보기</button>
+              </div>
+            </section>
+          )}
+
+          {/* 상영 예정 영화 뒤 → TV 배너 삽입 */}
+          {section.id === "Upcoming" && (
+            <section className="custom-banner tv-banner">
+              <div className="overlay" />
+              <div className="banner-text">
+                <h2>방영 중인 인기 TV 시리즈</h2>
+                <button onClick={() => navigate("/tv")}>TV 전체보기</button>
+              </div>
+            </section>
+          )}
+        </React.Fragment>
       ))}
     </>
   );

@@ -1,12 +1,12 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import {useSimilar} from "../../hook/useSimilar";
+import {useMovieSimilar} from "../../hook/useMovieSimilar";
 import MovieCard from "../homepage/moviecard/MovieCard";
 import LoadingBar from "../LoadingBar";
 
 const SimilarMovies = ({id}) => {
-  const {data, isLoading, isError, error} = useSimilar(id);
+  const {data, isLoading, isError, error} = useMovieSimilar(id);
     if (isLoading) {
     return <LoadingBar />;
   }

@@ -1,12 +1,12 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import {useRecommendations} from "../../hook/useRecommendations";
+import {useMovieRecommendations} from "../../hook/useMovieRecommendations";
 import MovieCard from "../homepage/moviecard/MovieCard";
 import LoadingBar from "../LoadingBar";
 
 const RecommendationsMovies = ({id}) => {
-  const {data, isLoading, isError, error} = useRecommendations(id);
+  const {data, isLoading, isError, error} = useMovieRecommendations(id);
     if (isLoading) {
     return <LoadingBar />;
   }

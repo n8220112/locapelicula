@@ -1,16 +1,24 @@
 // --------------------------------------
 // 색상정의
 // --------------------------------------
-$primary: #ffc952;
+
+// 라이트 모드 팔레트
+$light-bg: #fafafa;
+$light-text: #222;
+$light-navbar: #fff;
+$light-card: #fff;
+
+// 다크 모드 팔레트
+$dark-bg: #141416;
+$dark-text: #f1f1f1;
+$dark-navbar: #222128;
+$dark-card: #302e3a;
+
+// 공통 컬러
+$primary: #ff7473;
 $success: #47b8e0;
-$danger: #ff7473;
-$info: pink;
-$warning: #ff7473;
-
-$primary: #ffc952;
-
-$dark: #222128;
-$light: #fafafa;
-
-$black: #141416;
-
+$danger: #ffc952;
+$info: #30aabd;
+$warning: #ffba53;
+$black: #333;
+$white: #fff;
