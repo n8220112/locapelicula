@@ -45,7 +45,7 @@ const RecommendationsMovies = ({id}) => {
                 <div>
                   <div className="title">
                     <h5>{rec.name}</h5>
-                    <small className={rec.vote_average >= 7 ? "vote-on" : "vote-off"}>
+                    <small className={rec.vote_average > 0 ? "vote-on" : "vote-off"}>
                       <FaStar /> {rec.vote_average.toFixed(1)}
                     </small>
                   </div>
