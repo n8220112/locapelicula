@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useSearchParams} from "react-router-dom";
-import {Container, Row, Col, Spinner, Alert, Form, Pagination, Button, Card} from "react-bootstrap";
+import {Container, Row, Col, Alert, Form, Pagination, Button, Card} from "react-bootstrap";
 
 import {usePopularMoviesQuery} from "../../hook/usePopularMovies";
 import {useSearchMovieQuery} from "../../hook/useSearchMovieQuery";
@@ -49,7 +49,8 @@ const MoviePage = () => {
   // 데이터 선택
   const movieList = keyword ? searchData?.data?.results : popularData?.data?.results;
 
-  if (isSearchLoading || isPopularLoading) return <LoadingBar />;
+  if (isSearchLoading || isPopularLoading) return;
+    <LoadingBar />
   if (isSearchError) return <Alert variant="danger">{searchError.message}</Alert>;
   if (isPopularError) return <Alert variant="danger">{popularError.message}</Alert>;
 

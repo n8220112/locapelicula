@@ -1,7 +1,7 @@
 import React from "react";
 import {useState, useEffect} from "react";
 import {Outlet, Link, useNavigate} from "react-router-dom";
-import {Button, Container, Form, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Form, Nav, Navbar, Dropdown, DropdownButton, InputGroup} from "react-bootstrap";
 import {BsSun, BsMoon} from "react-icons/bs";
 import Footer from "./Footer";
 
@@ -10,6 +10,7 @@ const AppLayout = () => {
   // value값을 받아와 url로 넘겨줌
   const [keyword, setKeyword] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [category, setCategory] = useState("movie"); // 기본값을 "movie"로
   const navigate = useNavigate();
 
   // 첫 로드시 다크모드 적용
@@ -20,7 +21,7 @@ const AppLayout = () => {
   const handleSubmit = (e) => {
     e.preventDefault(); //기본 이벤트 제거 (새로고침)
     if (keyword.trim() !== "") {
-      navigate(`/movies?keyword=${keyword}`);
+      navigate(`/${category}?keyword=${keyword}`);
       setKeyword(""); //검색 완료 후 빈 문자열로 초기화
     }
   };
@@ -71,10 +72,17 @@ const AppLayout = () => {
             </Nav>
 
             {/* 검색폼 */}
-            <Form className="d-flex me-3" onSubmit={handleSubmit}>
-              <Form.Control type="search" placeholder="영화/TV 검색" className="me-2" aria-label="Search" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-              <Button type="submit">Search</Button>
-            </Form>
+            <InputGroup className="search-wrap">
+              <DropdownButton title={category === "movie" ? "영화" : "TV"}>
+                <Dropdown.Item onClick={() => setCategory("movie")}>영화</Dropdown.Item>
+                <Dropdown.Item onClick={() => setCategory("tv")}>TV</Dropdown.Item>
+              </DropdownButton>
+
+              <Form className="d-flex me-3" onSubmit={handleSubmit}>
+                <Form.Control type="search" placeholder={category === "movie" ? "영화 검색" : "TV 검색"} className="me-2" aria-label="Search" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+                <Button type="submit">Search</Button>
+              </Form>
+            </InputGroup>
           </Navbar.Collapse>
         </Container>
       </Navbar>
