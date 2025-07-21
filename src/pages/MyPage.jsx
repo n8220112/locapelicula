@@ -1,5 +1,5 @@
 import React from "react";
-import {Container, Row, Col} from "react-bootstrap/Col";
+import {Container, Row, Col} from "react-bootstrap";
 import {FaInstagram, FaFacebook, FaSnapchatGhost, FaPencilAlt} from "react-icons/fa";
 
 const MyPage = () => {

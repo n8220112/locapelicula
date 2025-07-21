@@ -1,4 +1,4 @@
-import {React, Button, Form, Container, Row, Col} from "react-bootstrap/Col";
+import {React, Button, Form, Container, Row, Col} from "react-bootstrap";
 
 const Login = () => {
   return (
