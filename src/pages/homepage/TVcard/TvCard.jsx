@@ -12,7 +12,7 @@ const TvCard = ({tv, index}) => {
   const {data} = useGenreListQuery();
   const genreList = data?.data?.genres || [];
   const genreNames = genreList.filter((g) => tv.genre_ids?.includes(g.id)).map((g) => g.name);
-
+  console.log(tv);
   return (
     <>
       <Card
@@ -29,8 +29,8 @@ const TvCard = ({tv, index}) => {
             <h5>
               {tv.name} <span style={{backgroundColor: tv.adult ? "#ff7473" : "#47b8e0"}}>{rating}</span>
             </h5>
-            <h5>평점 {tv.vote_average.toFixed(1)}</h5>
-            <h5>{genreNames?.join("/")}</h5>
+            {tv.vote_average ? <span>평점 {tv.vote_average.toFixed(1)}</span> : ""}
+            {tv.genre_ids.length > 0 ? <span>{genreNames?.join("/")}</span> : ""}
             <p>{tv.overview}</p>
           </div>
         </div>

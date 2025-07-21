@@ -1,10 +1,6 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import {FaInstagram, FaFacebook, FaSnapchatGhost, FaPencilAlt } from "react-icons/fa";
+import {Container, Row, Col} from "react-bootstrap/Col";
+import {FaInstagram, FaFacebook, FaSnapchatGhost, FaPencilAlt} from "react-icons/fa";
 
 const MyPage = () => {
   return (
@@ -19,7 +15,10 @@ const MyPage = () => {
         <Row className="gap-5">
           <Col md={4} className="profile-wrap text-center border rounded bg-dark p-5">
             <div className="name">
-              <h3>Abril Lee<FaPencilAlt /></h3>
+              <h3>
+                Abril Lee
+                <FaPencilAlt />
+              </h3>
               <p>
                 <em>@abrilprimaveralee</em>
               </p>
@@ -37,7 +36,10 @@ const MyPage = () => {
             </div>
           </Col>
           <Col md={7} className="profile-wrap border rounded bg-dark p-5">
-            <h3>Profile<FaPencilAlt /></h3>
+            <h3>
+              Profile
+              <FaPencilAlt />
+            </h3>
             <section className="profile-grid">
               <div>
                 <h6>이름</h6>

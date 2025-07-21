@@ -1,9 +1,4 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import {React, Button, Form, Container, Row, Col} from "react-bootstrap/Col";
 
 const Login = () => {
   return (
@@ -36,7 +31,9 @@ const Login = () => {
           </Col>
         </Row>
         <Row className="justify-content-md-center">
-          <Col md={12} className="text-center">또는</Col>
+          <Col md={12} className="text-center">
+            또는
+          </Col>
         </Row>
         <Row className="justify-content-md-center">
           <Col md={5}>

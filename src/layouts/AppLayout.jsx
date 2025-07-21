@@ -10,7 +10,7 @@ const AppLayout = () => {
   // value값을 받아와 url로 넘겨줌
   const [keyword, setKeyword] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [category, setCategory] = useState("movie"); // 기본값을 "movie"로
+  const [category, setCategory] = useState("movies"); // 기본값을 "movie"로
   const navigate = useNavigate();
 
   // 첫 로드시 다크모드 적용
@@ -73,13 +73,13 @@ const AppLayout = () => {
 
             {/* 검색폼 */}
             <InputGroup className="search-wrap">
-              <DropdownButton title={category === "movie" ? "영화" : "TV"}>
-                <Dropdown.Item onClick={() => setCategory("movie")}>영화</Dropdown.Item>
+              <DropdownButton title={category === "movies" ? "영화" : "TV"} variant="warning">
+                <Dropdown.Item onClick={() => setCategory("movies")}>영화</Dropdown.Item>
                 <Dropdown.Item onClick={() => setCategory("tv")}>TV</Dropdown.Item>
               </DropdownButton>
 
               <Form className="d-flex me-3" onSubmit={handleSubmit}>
-                <Form.Control type="search" placeholder={category === "movie" ? "영화 검색" : "TV 검색"} className="me-2" aria-label="Search" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+                <Form.Control type="search" placeholder={category === "movies" ? "영화 검색" : "TV 검색"} className="me-2" aria-label="Search" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
                 <Button type="submit">Search</Button>
               </Form>
             </InputGroup>

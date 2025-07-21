@@ -1,8 +1,9 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {FaRegFaceGrinBeamSweat} from "react-icons/fa6";
 
 const NotFoundPage = () => {
+  const navigate = useNavigate();
   return (
     <main>
       <section className="not-found-page">
@@ -11,7 +12,7 @@ const NotFoundPage = () => {
         <h2>PAGE NOT FOUND</h2>
         <p>페이지를 찾을 수 없습니다.</p>
         <div className="button-wrap">
-          <Link to="/">이전 페이지</Link>
+          <Link to={navigate(-1)}>이전 페이지</Link>
           <Link to="/">MOVIE 306 홈</Link>
         </div>
       </section>

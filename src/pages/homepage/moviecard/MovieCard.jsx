@@ -29,8 +29,8 @@ const MovieCard = ({movie, index}) => {
             <h5>
               {movie.title} <span style={{backgroundColor: movie.adult ? "#ff7473" : "#47b8e0"}}>{rating}</span>
             </h5>
-            <h5>평점 {movie.vote_average.toFixed(1)}</h5>
-            <h5>{genreNames?.join("/")}</h5>
+            {movie.vote_average ? <span>평점 {movie.vote_average.toFixed(1)}</span> : ""}
+            {movie.genre_ids.length > 0 ? <span>{genreNames?.join("/")}</span> : ""}
             <p>{movie.overview}</p>
           </div>
         </div>
@@ -40,7 +40,7 @@ const MovieCard = ({movie, index}) => {
           style={{
             cursor: "pointer",
           }}
-          onClick={() => navigate(`/movie/${movie.id}`)}
+          onClick={() => navigate(`/movies/${movie.id}`)}
         >
           {movie.title}
         </h5>
